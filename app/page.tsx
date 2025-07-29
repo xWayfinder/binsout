@@ -8,19 +8,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { cn } from "@/lib/utils"
 
 // Mock geofence data for councils
 const councilData = [
   {
     name: "Manningham City Council",
     bounds: {
-      // Rough bounds for Doncaster/Donvale area
       north: -37.75,
       south: -37.8,
       east: 145.15,
       west: 145.1,
     },
-    color: "#22c55e",
+    color: "var(--primary)",
     binSchedule: {
       general: { day: "Tuesday", week: "Weekly" },
       recycling: { day: "Tuesday", week: "Fortnightly (Week A)" },
@@ -35,7 +35,7 @@ const councilData = [
       east: 145.15,
       west: 145.1,
     },
-    color: "#3b82f6",
+    color: "var(--secondary)",
     binSchedule: {
       general: { day: "Wednesday", week: "Weekly" },
       recycling: { day: "Wednesday", week: "Fortnightly (Week A)" },
@@ -59,9 +59,9 @@ const mockAddresses = [
 ]
 
 const binTypes = [
-  { type: "general", name: "General Waste", color: "bg-red-500", icon: "🗑️" },
-  { type: "recycling", name: "Recycling", color: "bg-yellow-500", icon: "♻️" },
-  { type: "green", name: "Green Waste", color: "bg-green-500", icon: "🌿" },
+  { type: "general", name: "General Waste", color: "bg-destructive", icon: "🗑️" },
+  { type: "recycling", name: "Recycling", color: "bg-primary", icon: "♻️" },
+  { type: "green", name: "Green Waste", color: "bg-accent", icon: "🌿" },
 ]
 
 export default function BinsOutPortal() {
@@ -117,20 +117,20 @@ export default function BinsOutPortal() {
         <CardDescription>Colored areas represent different council boundaries</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="relative w-full h-64 bg-slate-100 rounded-lg overflow-hidden">
+        <div className="relative w-full h-64 bg-muted rounded-lg overflow-hidden">
           {/* Mock map with colored council areas */}
           <div className="absolute inset-0 flex">
             <div className="flex-1 opacity-60" style={{ backgroundColor: councilData[0].color }}>
-              <div className="p-4 text-white font-semibold text-sm">Manningham City Council</div>
+              <div className="p-4 text-primary-foreground font-semibold text-sm">Manningham City Council</div>
             </div>
             <div className="flex-1 opacity-60" style={{ backgroundColor: councilData[1].color }}>
-              <div className="p-4 text-white font-semibold text-sm">Whitehorse City Council</div>
+              <div className="p-4 text-primary-foreground font-semibold text-sm">Whitehorse City Council</div>
             </div>
           </div>
 
           {selectedAddress && (
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <div className="bg-red-500 w-4 h-4 rounded-full border-2 border-white shadow-lg animate-pulse"></div>
+              <div className="bg-destructive w-4 h-4 rounded-full border-2 border-background shadow-lg animate-pulse"></div>
             </div>
           )}
         </div>
@@ -139,7 +139,7 @@ export default function BinsOutPortal() {
           {councilData.map((council, index) => (
             <div key={index} className="flex items-center gap-2">
               <div className="w-4 h-4 rounded" style={{ backgroundColor: council.color }}></div>
-              <span className="text-sm">{council.name}</span>
+              <span className="text-sm text-muted-foreground">{council.name}</span>
             </div>
           ))}
         </div>
@@ -148,21 +148,21 @@ export default function BinsOutPortal() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-card border-b">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="bg-green-600 p-2 rounded-lg">
-                <Trash2 className="w-6 h-6 text-white" />
+              <div className="bg-primary p-2 rounded-lg">
+                <Trash2 className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-green-800">binsout.com.au</h1>
-                <p className="text-sm text-gray-600">Your local bin collection guide</p>
+                <h1 className="text-2xl font-bold text-primary">binsout.com.au</h1>
+                <p className="text-sm text-muted-foreground">Your local bin collection guide</p>
               </div>
             </div>
-            <div className="hidden md:flex items-center gap-4 text-sm text-gray-600">
+            <div className="hidden md:flex items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1">
                 <MapPin className="w-4 h-4" />
                 Australia-wide coverage
@@ -175,8 +175,8 @@ export default function BinsOutPortal() {
       <main className="max-w-6xl mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Never miss bin day again! 🗑️</h2>
-          <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">Never miss bin day again! 🗑️</h2>
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
             Enter your address to find your local council's bin collection schedule. Get reminders for general waste,
             recycling, and green waste collection days.
           </p>
@@ -200,14 +200,14 @@ export default function BinsOutPortal() {
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 className="flex-1"
               />
-              <Button onClick={handleSearch} disabled={isSearching} className="bg-green-600 hover:bg-green-700">
+              <Button onClick={handleSearch} disabled={isSearching}>
                 {isSearching ? "Searching..." : "Search"}
               </Button>
             </div>
 
             {/* Quick examples */}
             <div className="mt-4">
-              <p className="text-sm text-gray-600 mb-2">Try these examples:</p>
+              <p className="text-sm text-muted-foreground mb-2">Try these examples:</p>
               <div className="flex flex-wrap gap-2">
                 <Button variant="outline" size="sm" onClick={() => setSearchQuery("Doncaster")}>
                   Doncaster
@@ -233,7 +233,7 @@ export default function BinsOutPortal() {
 
             {/* View Toggle */}
             <div className="flex justify-center">
-              <div className="bg-white rounded-lg p-1 shadow-sm border">
+              <div className="bg-card rounded-lg p-1 shadow-sm border">
                 <Button
                   variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
@@ -262,7 +262,7 @@ export default function BinsOutPortal() {
                   const schedule = selectedAddress.councilData?.binSchedule[bin.type]
                   return (
                     <Card key={bin.type} className="relative overflow-hidden">
-                      <div className={`absolute top-0 left-0 right-0 h-1 ${bin.color}`}></div>
+                      <div className={cn("absolute top-0 left-0 right-0 h-1", bin.color)}></div>
                       <CardHeader className="pb-3">
                         <CardTitle className="flex items-center gap-2 text-lg">
                           <span className="text-2xl">{bin.icon}</span>
@@ -272,7 +272,7 @@ export default function BinsOutPortal() {
                       <CardContent>
                         <div className="space-y-2">
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-gray-500" />
+                            <Calendar className="w-4 h-4 text-muted-foreground" />
                             <span className="font-semibold">{schedule?.day}</span>
                           </div>
                           <Badge variant="secondary" className="text-xs">
@@ -297,11 +297,11 @@ export default function BinsOutPortal() {
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-gray-500" />
+                    <Phone className="w-4 h-4 text-muted-foreground" />
                     <span>(03) 9840 9333</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-gray-500" />
+                    <Mail className="w-4 h-4 text-muted-foreground" />
                     <span>info@manningham.vic.gov.au</span>
                   </div>
                 </div>
@@ -321,67 +321,67 @@ export default function BinsOutPortal() {
         <Separator className="my-12" />
 
         {/* Download App Section */}
-        <Card className="bg-gradient-to-r from-green-600 to-blue-600 text-white">
+        <Card className="bg-primary text-primary-foreground">
           <CardContent className="p-8 text-center">
             <div className="mb-6">
               <Download className="w-16 h-16 mx-auto mb-4 opacity-90" />
               <h3 className="text-2xl font-bold mb-2">Get the BinsOut App</h3>
-              <p className="text-green-100 max-w-2xl mx-auto">
+              <p className="text-primary-foreground/90 max-w-2xl mx-auto">
                 Never forget bin day again! Get push notifications, set custom reminders, and access your schedule
                 offline with our mobile app.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100 gap-2 min-w-48">
+              <Button variant="secondary" size="lg" className="gap-2 min-w-48">
                 <Download className="w-5 h-5" />
                 Download for iOS
               </Button>
-              <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100 gap-2 min-w-48">
+              <Button variant="secondary" size="lg" className="gap-2 min-w-48">
                 <Download className="w-5 h-5" />
                 Download for Android
               </Button>
             </div>
 
-            <p className="text-sm text-green-100 mt-4">Free download • Available Australia-wide • Offline access</p>
+            <p className="text-sm text-primary-foreground/90 mt-4">Free download • Available Australia-wide • Offline access</p>
           </CardContent>
         </Card>
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-16">
+      <footer className="bg-card text-card-foreground mt-16">
         <div className="max-w-6xl mx-auto px-4 py-8">
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="bg-green-600 p-1 rounded">
-                  <Trash2 className="w-4 h-4 text-white" />
+                <div className="bg-primary p-1 rounded">
+                  <Trash2 className="w-4 h-4 text-primary-foreground" />
                 </div>
                 <span className="font-bold">binsout.com.au</span>
               </div>
-              <p className="text-gray-400 text-sm">Making waste management easier for all Australians.</p>
+              <p className="text-muted-foreground text-sm">Making waste management easier for all Australians.</p>
             </div>
 
             <div>
               <h4 className="font-semibold mb-3">Quick Links</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-foreground">
                     About Us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-foreground">
                     Contact
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-foreground">
                     Privacy Policy
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-foreground">
                     Terms of Service
                   </a>
                 </li>
@@ -390,7 +390,7 @@ export default function BinsOutPortal() {
 
             <div>
               <h4 className="font-semibold mb-3">Coverage Areas</h4>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>Melbourne Metro</li>
                 <li>Sydney Metro</li>
                 <li>Brisbane Metro</li>
@@ -399,9 +399,9 @@ export default function BinsOutPortal() {
             </div>
           </div>
 
-          <Separator className="my-6 bg-gray-700" />
+          <Separator className="my-6" />
 
-          <div className="text-center text-sm text-gray-400">
+          <div className="text-center text-sm text-muted-foreground">
             <p>&copy; 2024 BinsOut. All rights reserved. Made with ❤️ in Australia.</p>
           </div>
         </div>
